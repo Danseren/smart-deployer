@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/finance/VestingWallet.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract AutoVestingSplitter is IUtilityContract, Ownable {
-
     constructor() Ownable(msg.sender) {}
 
     struct PayeeInfo {
@@ -38,10 +37,10 @@ contract AutoVestingSplitter is IUtilityContract, Ownable {
         _;
     }
 
-    function initialize(bytes memory _initData) external notInitialized override returns (bool) {
+    function initialize(bytes memory _initData) external override notInitialized returns (bool) {
         (address[] memory _accounts, uint256[] memory _shares, uint64 _duration, address _owner) =
             abi.decode(_initData, (address[], uint256[], uint64, address));
-        
+
         if (_accounts.length != _shares.length || _accounts.length == 0) revert InvalidInput();
 
         start = block.timestamp;
@@ -54,11 +53,7 @@ contract AutoVestingSplitter is IUtilityContract, Ownable {
             VestingWallet vesting = new VestingWallet(_accounts[i], uint64(start), _duration);
             vestingWalletOf[_accounts[i]] = address(vesting);
 
-            payees.push(PayeeInfo({
-                account: _accounts[i],
-                share: _shares[i],
-                vestingWallet: address(vesting)
-            }));
+            payees.push(PayeeInfo({account: _accounts[i], share: _shares[i], vestingWallet: address(vesting)}));
 
             totalShares += _shares[i];
         }
@@ -68,12 +63,11 @@ contract AutoVestingSplitter is IUtilityContract, Ownable {
         return true;
     }
 
-    function getInitData(
-        address[] memory _accounts,
-        uint256[] memory _shares,
-        uint64 _duration,
-        address _owner
-    ) external pure returns (bytes memory) {
+    function getInitData(address[] memory _accounts, uint256[] memory _shares, uint64 _duration, address _owner)
+        external
+        pure
+        returns (bytes memory)
+    {
         return abi.encode(_accounts, _shares, _duration, _owner);
     }
 

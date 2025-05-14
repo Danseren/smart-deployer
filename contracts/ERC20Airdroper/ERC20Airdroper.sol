@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ERC20Airdroper is IUtilityContract, Ownable {
-
     constructor() Ownable(msg.sender) {}
 
     IERC20 public token;
@@ -34,8 +33,9 @@ contract ERC20Airdroper is IUtilityContract, Ownable {
         }
     }
 
-    function initialize(bytes memory _initData) external notInitialized returns(bool) {
-        (address _token, uint256 _amount, address _treasury, address _owner) = abi.decode(_initData, (address, uint256, address, address));
+    function initialize(bytes memory _initData) external notInitialized returns (bool) {
+        (address _token, uint256 _amount, address _treasury, address _owner) =
+            abi.decode(_initData, (address, uint256, address, address));
 
         token = IERC20(_token);
         amount = _amount;
@@ -47,7 +47,11 @@ contract ERC20Airdroper is IUtilityContract, Ownable {
         return true;
     }
 
-    function getInitData(address _token, uint256 _amount, address _treasury, address _owner) external pure returns(bytes memory) {
+    function getInitData(address _token, uint256 _amount, address _treasury, address _owner)
+        external
+        pure
+        returns (bytes memory)
+    {
         return abi.encode(_token, _amount, _treasury, _owner);
     }
 }

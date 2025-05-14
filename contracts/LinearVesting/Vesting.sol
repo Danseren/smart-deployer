@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Vesting is IUtilityContract, Ownable {
-
     constructor() Ownable(msg.sender) {}
 
     IERC20 public token;
@@ -76,13 +75,13 @@ contract Vesting is IUtilityContract, Ownable {
         emit Claim(msg.sender, claimable, block.timestamp);
     }
 
-    function vestedAmount(address _claimer) internal view returns(uint256) {
+    function vestedAmount(address _claimer) internal view returns (uint256) {
         VestingInfo storage vesting = vestings[_claimer];
 
         if (block.timestamp < vesting.startTime + vesting.cliff) return 0;
 
         uint256 passedTime = block.timestamp - (vesting.startTime + vesting.cliff);
-        
+
         if (passedTime > vesting.duration) {
             passedTime = vesting.duration;
         }
@@ -90,7 +89,7 @@ contract Vesting is IUtilityContract, Ownable {
         return (vesting.totalAmount * passedTime) / vesting.duration;
     }
 
-    function claimableAmount(address _claimer) public view returns(uint256) {
+    function claimableAmount(address _claimer) public view returns (uint256) {
         VestingInfo storage vesting = vestings[_claimer];
 
         if (block.timestamp < vesting.startTime + vesting.cliff) return 0;
@@ -107,10 +106,13 @@ contract Vesting is IUtilityContract, Ownable {
         uint256 _claimCooldown,
         uint256 _minClaimAmount
     ) external onlyOwner {
-
         require(token.balanceOf(address(this)) - allocatedTokens >= _totalAmount, InfsufficientBalance());
         require(_totalAmount > 0, AmountCantBeZero());
-        require(vestings[_beneficiary].totalAmount == 0 || vestings[_beneficiary].totalAmount == vestings[_beneficiary].claimed, VestingAlreadyExist());
+        require(
+            vestings[_beneficiary].totalAmount == 0
+                || vestings[_beneficiary].totalAmount == vestings[_beneficiary].claimed,
+            VestingAlreadyExist()
+        );
         require(_startTime > block.timestamp, StartTimeShouldBeFuture());
         require(_duration > 0, DurationCantBeZero());
         require(_cliff < _duration, CliffCantBeLongerThanDuration());
@@ -130,7 +132,7 @@ contract Vesting is IUtilityContract, Ownable {
 
         allocatedTokens += _totalAmount;
 
-        emit VestingCreated(_beneficiary, _totalAmount, block.timestamp);  
+        emit VestingCreated(_beneficiary, _totalAmount, block.timestamp);
     }
 
     function withdrawUnallocated(address _to) external onlyOwner {
@@ -141,19 +143,17 @@ contract Vesting is IUtilityContract, Ownable {
         emit TokensWithdrawn(_to, available);
     }
 
-    function initialize(bytes memory _initData) external notInitialized returns(bool) {
-
+    function initialize(bytes memory _initData) external notInitialized returns (bool) {
         (address _token, address _owner) = abi.decode(_initData, (address, address));
         token = IERC20(_token);
 
         Ownable.transferOwnership(_owner);
 
         initialized = true;
-        return true;        
+        return true;
     }
 
-    function getInitData(address _token, address _owner) external pure returns(bytes memory) {
+    function getInitData(address _token, address _owner) external pure returns (bytes memory) {
         return abi.encode(_token, _owner);
     }
 }
-

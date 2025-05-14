@@ -3,5 +3,5 @@
 pragma solidity ^0.8.9;
 
 interface IUtilityContract {
-    function initialize(bytes memory _initData) external returns(bool);
+    function initialize(bytes memory _initData) external returns (bool);
 }
