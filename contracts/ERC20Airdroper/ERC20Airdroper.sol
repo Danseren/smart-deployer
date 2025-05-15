@@ -2,12 +2,14 @@
 
 pragma solidity ^0.8.9;
 
-import "../IUtilityContract.sol";
+import "../UtilityContract/AbstractUtilityContract.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ERC20Airdroper is IUtilityContract, Ownable {
-    constructor() Ownable(msg.sender) {}
+contract ERC20Airdroper is AbstractUtilityContract, Ownable {
+    constructor() payable Ownable(msg.sender) {}
+
+    uint256 public constant MAX_AIRDROP_BATCH_SIZE = 300;
 
     IERC20 public token;
     uint256 public amount;
@@ -18,6 +20,7 @@ contract ERC20Airdroper is IUtilityContract, Ownable {
     error ArraysLengthMismatch();
     error NotEnoughApprovedTokens();
     error TransferFailed();
+    error BatchSizeExceeded();
 
     modifier notInitialized() {
         require(!initialized, AlreadyInitialized());
@@ -25,15 +28,21 @@ contract ERC20Airdroper is IUtilityContract, Ownable {
     }
 
     function airdrop(address[] calldata receivers, uint256[] calldata amounts) external onlyOwner {
+        require(receivers.length <= MAX_AIRDROP_BATCH_SIZE, BatchSizeExceeded());
         require(receivers.length == amounts.length, ArraysLengthMismatch());
         require(token.allowance(treasury, address(this)) >= amount, NotEnoughApprovedTokens());
 
-        for (uint256 i = 0; i < receivers.length; i++) {
-            require(token.transferFrom(treasury, receivers[i], amounts[i]), TransferFailed());
+        address treasuryAddress = treasury;
+
+        for (uint256 i = 0; i < receivers.length;) {
+            require(token.transferFrom(treasuryAddress, receivers[i], amounts[i]), TransferFailed());
+            unchecked {
+                ++i;
+            }
         }
     }
 
-    function initialize(bytes memory _initData) external notInitialized returns (bool) {
+    function initialize(bytes memory _initData) external override notInitialized returns (bool) {
         (address _token, uint256 _amount, address _treasury, address _owner) =
             abi.decode(_initData, (address, uint256, address, address));
 

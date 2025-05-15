@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.9;
 
-import "../IUtilityContract.sol";
+import "../UtilityContract/IUtilityContract.sol";
 import "@openzeppelin/contracts/finance/VestingWallet.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 

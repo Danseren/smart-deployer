@@ -1,0 +1,43 @@
+rules:
+  - id: no-inline-assembly
+    patterns:
+      - pattern: assembly { ... }
+    message: "Avoid inline assembly. Use high-level Solidity instead."
+    severity: WARNING
+    languages: [solidity]
+
+  - id: public-mapping
+    patterns:
+      - pattern: mapping(... => ...) public $MAPPING;
+    message: "Avoid public mappings. Use getters for encapsulation."
+    severity: WARNING
+    languages: [solidity]
+
+  - id: tx-origin-auth
+    patterns:
+      - pattern: if (tx.origin == ...)
+    message: "Never use tx.origin for authorization. Use msg.sender."
+    severity: ERROR
+    languages: [solidity]
+
+  - id: unchecked-send
+    patterns:
+      - pattern: $ADDR.send(...)
+    message: "Using .send() is unsafe. Use call.value() instead with checks."
+    severity: ERROR
+    languages: [solidity]
+
+  - id: fallback-payable
+    patterns:
+      - pattern: |
+          fallback() external { ... }
+    message: "Fallback functions should be payable or should revert."
+    severity: WARNING
+    languages: [solidity]
+
+  - id: floating-pragma
+    patterns:
+      - pattern: pragma solidity ^$VERSION;
+    message: "Avoid floating pragmas. Pin to an exact compiler version (e.g., 0.8.23)."
+    severity: WARNING
+    languages: [solidity]

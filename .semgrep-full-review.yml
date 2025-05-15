@@ -1,0 +1,162 @@
+rules:
+  # ===== Compiler pragma =====
+  - id: solidity-floating-pragma
+    pattern: |
+      pragma solidity ^$VERSION;
+    message: Avoid floating pragmas. Pin to a specific compiler version for deterministic builds.
+    languages: [solidity]
+    severity: WARNING
+
+  # ===== Inline Assembly =====
+  - id: solidity-inline-assembly
+    pattern: |
+      assembly { ... }
+    message: Avoid inline assembly where possible — it's error-prone and harder to audit.
+    languages: [solidity]
+    severity: ERROR
+
+  # ===== tx.origin for auth =====
+  - id: solidity-tx-origin-auth
+    pattern: |
+      if (tx.origin == $X) { ... }
+    message: Never use `tx.origin` for authentication — use `msg.sender` instead.
+    languages: [solidity]
+    severity: ERROR
+
+  # ===== Public Mappings =====
+  - id: solidity-public-mapping
+    pattern: |
+      mapping($K => $V) public $M;
+    message: Public mappings expose entire data structures. Consider exposing via getter.
+    languages: [solidity]
+    severity: WARNING
+
+  # ===== External call without checks =====
+  - id: solidity-lowlevel-call
+    pattern: |
+      $X.call{value: $V}($DATA);
+    message: Avoid low-level `.call` without success check. It can fail silently.
+    languages: [solidity]
+    severity: ERROR
+
+  # ===== Reentrancy pattern =====
+  - id: solidity-reentrancy
+    pattern: |
+      $X.call{value: $V}("");
+      $Y;
+    message: Potential reentrancy vulnerability — update state before external calls.
+    languages: [solidity]
+    severity: ERROR
+
+  # ===== Visibility not specified =====
+  - id: solidity-implicit-visibility
+    pattern: |
+      function $FN($ARGS) $RETURNS { ... }
+    message: Function visibility not specified. Add explicit visibility.
+    languages: [solidity]
+    severity: WARNING
+
+  # ===== State variable cached in memory =====
+  - id: solidity-cache-state-variable
+    pattern: |
+      $A = $THIS.$B;
+    message: Cache state variable to memory/local to save gas in loops.
+    languages: [solidity]
+    severity: INFO
+
+  # ===== Unchecked math for gas savings =====
+  - id: solidity-use-unchecked
+    pattern: |
+      unchecked { $BODY }
+    message: Use `unchecked` for arithmetic when overflows are impossible to save gas.
+    languages: [solidity]
+    severity: INFO
+
+  # ===== Inheritance order =====
+  - id: solidity-inheritance-order
+    pattern: |
+      contract $C is $A, $B { ... }
+    message: Ensure inheritance order is correct — interfaces first, parent contracts later.
+    languages: [solidity]
+    severity: WARNING
+
+  # ===== Fallback function =====
+  - id: solidity-fallback-no-revert
+    pattern: |
+      fallback() external payable { ... }
+    message: Consider reverting in fallback to prevent accidental ETH transfers.
+    languages: [solidity]
+    severity: WARNING
+
+  # ===== Receive function safety =====
+  - id: solidity-receive-no-guard
+    pattern: |
+      receive() external payable { ... }
+    message: Ensure receive() has proper guard logic to avoid accidental funds reception.
+    languages: [solidity]
+    severity: WARNING
+
+  # ===== Events for state-changing functions =====
+  - id: solidity-missing-event
+    pattern: |
+      function $FN($ARGS) external { $BODY }
+    message: Consider emitting events for external state-changing functions.
+    languages: [solidity]
+    severity: INFO
+
+  # ===== Multiple require statements =====
+  - id: solidity-multiple-require
+    pattern: |
+      require($COND1, $MSG1);
+      require($COND2, $MSG2);
+    message: Consider consolidating multiple require checks for readability.
+    languages: [solidity]
+    severity: INFO
+
+  # ===== Complex nesting =====
+  - id: solidity-deep-nesting
+    pattern: |
+      if ($COND1) { if ($COND2) { if ($COND3) { ... } } }
+    message: Reduce nesting levels for better readability.
+    languages: [solidity]
+    severity: INFO
+
+  # ===== Hardcoded addresses =====
+  - id: solidity-hardcoded-address
+    pattern: |
+      address($ADDR)
+    message: Avoid hardcoding addresses. Use constants or config variables.
+    languages: [solidity]
+    severity: WARNING
+
+  # ===== NatSpec missing =====
+  - id: solidity-missing-natspec
+    pattern: |
+      function $FN($ARGS) $VISIBILITY $RETURNS { ... }
+    message: Missing NatSpec documentation comment for public/external function.
+    languages: [solidity]
+    severity: INFO
+
+  # ===== Implicit constructor visibility (deprecated in ^0.7.0) =====
+  - id: solidity-constructor-visibility
+    pattern: |
+      constructor($ARGS) { ... }
+    message: Explicitly declare constructor visibility for clarity, even if optional.
+    languages: [solidity]
+    severity: INFO
+
+  # ===== Low-level delegatecall =====
+  - id: solidity-delegatecall
+    pattern: |
+      $X.delegatecall($DATA);
+    message: Use `delegatecall` cautiously — prone to vulnerabilities if untrusted code is used.
+    languages: [solidity]
+    severity: ERROR
+
+  # ===== Block.timestamp usage =====
+  - id: solidity-block-timestamp
+    pattern: |
+      block.timestamp
+    message: Avoid using block.timestamp for critical randomness or security logic.
+    languages: [solidity]
+    severity: WARNING
