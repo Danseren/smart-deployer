@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract ERC1155Airdroper is IUtilityContract, Ownable {
     constructor() payable Ownable(msg.sender) {}
 
-    uint256 constant MAX_AIRDROP_BATCH_SIZE = 10;
+    uint256 public constant MAX_AIRDROP_BATCH_SIZE = 10;
 
     IERC1155 public token;
     address public treasury;

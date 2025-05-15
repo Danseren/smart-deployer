@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ERC721Airdroper is IUtilityContract, Ownable {
-    constructor() Ownable(msg.sender) payable {}
+    constructor() payable Ownable(msg.sender) {}
 
     uint256 public constant MAX_AIRDROP_BATCH_SIZE = 300;
 
@@ -19,6 +19,7 @@ contract ERC721Airdroper is IUtilityContract, Ownable {
     error ArraysLengthMismatch();
     error NeedToApproveTokens();
     error BatchSizeExceeded();
+
     modifier notInitialized() {
         require(!initialized, AlreadyInitialized());
         _;

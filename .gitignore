@@ -3,6 +3,7 @@
 artifacts
 contracts/artifacts
 .cursor/rules/soidityrules.mdc
+lib/
 out/
 cache/
 artifacts/
