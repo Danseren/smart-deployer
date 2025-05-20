@@ -2,11 +2,11 @@
 
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import {IDeployManager} from "../DeployManager/IDeployManager.sol";
 import {IUtilityContract} from "./IUtilityContract.sol";
 
-abstract contract AbstractUtilityContract is IUtilityContract, IERC165 {
+abstract contract AbstractUtilityContract is IUtilityContract, ERC165 {
     address public deployManager;
 
     function initialize(bytes memory _initData) external virtual override returns (bool) {
@@ -16,7 +16,7 @@ abstract contract AbstractUtilityContract is IUtilityContract, IERC165 {
     }
 
     function setDeployManager(address _deployManager) internal virtual {
-        if (!validatedDeployManager(_deployManager)) {
+        if (!validateDeployManager(_deployManager)) {
             revert FailedToDeployManager();
         }
         deployManager = _deployManager;
@@ -29,7 +29,7 @@ abstract contract AbstractUtilityContract is IUtilityContract, IERC165 {
 
         bytes4 interfaceId = type(IDeployManager).interfaceId;
 
-        if (!DeployManager(_deployManager).supportsInterface(interfaceId)) {
+        if (!IDeployManager(_deployManager).supportsInterface(interfaceId)) {
             revert NotDeployManager();
         }
 
@@ -40,7 +40,7 @@ abstract contract AbstractUtilityContract is IUtilityContract, IERC165 {
         return deployManager;
     }
 
-    function supportInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC135) returns (bool) {
-        return interfaceId == type(IUtilityContract).interfaceId || super.supportInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool) {
+        return interfaceId == type(IUtilityContract).interfaceId || super.supportsInterface(interfaceId);
     }
 }
