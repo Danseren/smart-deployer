@@ -8,18 +8,29 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../UtilityContract/IUtilityContract.sol";
 import "./IDeployManager.sol";
 
+/// @title DeployManager - Factory for utility contracts
+/// @notice Manages the deployment of utility contracts using minimal proxy pattern
+/// @dev Implements IDeployManager interface and inherits from OpenZeppelin's Ownable and ERC165
 contract DeployManager is IDeployManager, Ownable, ERC165 {
+    /// @notice Initializes the contract and sets the owner
+    /// @dev Calls Ownable constructor with msg.sender
     constructor() payable Ownable(msg.sender) {}
 
+    /// @notice Structure to store information about registered utility contracts
+    /// @dev Used in contractsData mapping
     struct ContractInfo {
         uint256 fee;
         bool isActive;
         uint256 registredAt;
     }
 
+    /// @notice Mapping of user addresses to their deployed contracts
     mapping(address => address[]) public deployedContracts;
+    
+    /// @notice Mapping of utility contract addresses to their configuration
     mapping(address => ContractInfo) public contractsData;
 
+    /// @inheritdoc IDeployManager
     function deploy(address _utilityContract, bytes calldata _initData) external payable override returns (address) {
         ContractInfo memory info = contractsData[_utilityContract];
 
@@ -40,6 +51,7 @@ contract DeployManager is IDeployManager, Ownable, ERC165 {
         return clone;
     }
 
+    /// @inheritdoc IDeployManager
     function addNewContract(address _contractAddress, uint256 _fee, bool _isActive) external override onlyOwner {
         require(
             IUtilityContract(_contractAddress).supportsInterface(type(IUtilityContract).interfaceId),
@@ -51,6 +63,7 @@ contract DeployManager is IDeployManager, Ownable, ERC165 {
         emit NewContractAdded(_contractAddress, _fee, _isActive, block.timestamp);
     }
 
+    /// @inheritdoc IDeployManager
     function updateFee(address _contractAddress, uint256 _newFee) external override onlyOwner {
         require(contractsData[_contractAddress].registredAt > 0, ContractDoesNotRegistered());
 
@@ -60,6 +73,7 @@ contract DeployManager is IDeployManager, Ownable, ERC165 {
         emit ContractFeeUpdated(_contractAddress, _oldFee, _newFee, block.timestamp);
     }
 
+    /// @inheritdoc IDeployManager
     function deactivateContract(address _address) external override onlyOwner {
         require(contractsData[_address].registredAt > 0, ContractDoesNotRegistered());
 
@@ -68,6 +82,7 @@ contract DeployManager is IDeployManager, Ownable, ERC165 {
         emit ContractStatusUpdated(_address, false, block.timestamp);
     }
 
+    /// @inheritdoc IDeployManager
     function activateContract(address _address) external override onlyOwner {
         require(contractsData[_address].registredAt > 0, ContractDoesNotRegistered());
 
@@ -76,6 +91,10 @@ contract DeployManager is IDeployManager, Ownable, ERC165 {
         emit ContractStatusUpdated(_address, true, block.timestamp);
     }
 
+    /// @notice Checks if contract supports specific interface
+    /// @dev Implementation of IERC165 interface detection
+    /// @param interfaceId The interface identifier to check
+    /// @return bool True if interface is supported
     function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool) {
         return interfaceId == type(IDeployManager).interfaceId || super.supportsInterface(interfaceId);
     }
