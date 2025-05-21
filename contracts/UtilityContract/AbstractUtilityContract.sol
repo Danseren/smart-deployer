@@ -26,7 +26,7 @@ abstract contract AbstractUtilityContract is IUtilityContract, ERC165 {
     /// @param _deployManager Address of the deploy manager to set
     function setDeployManager(address _deployManager) internal virtual {
         if (!validateDeployManager(_deployManager)) {
-            revert FailedToDeployManager();
+            revert FailedToValidateDeployManager();
         }
         deployManager = _deployManager;
     }
@@ -54,10 +54,7 @@ abstract contract AbstractUtilityContract is IUtilityContract, ERC165 {
         return deployManager;
     }
 
-    /// @notice Checks interface support for the contract
-    /// @dev Extends ERC165 support to include IUtilityContract interface
-    /// @param interfaceId The interface identifier to check
-    /// @return bool Whether the interface is supported
+    /// @inheritdoc ERC165
     function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool) {
         return interfaceId == type(IUtilityContract).interfaceId || super.supportsInterface(interfaceId);
     }

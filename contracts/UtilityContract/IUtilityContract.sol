@@ -18,8 +18,8 @@ interface IUtilityContract is IERC165 {
     /// @dev Error thrown when caller is not the deploy manager
     error NotDeployManager();
 
-    /// @dev Error thrown when deploy manager initialization fails
-    error FailedToDeployManager();
+    /// @dev Error thrown when deploy manager validation failed throw validateDeployManager()
+    error FailedToValidateDeployManager();
 
     // ------------------------------------------------------------------------
     // Functions
