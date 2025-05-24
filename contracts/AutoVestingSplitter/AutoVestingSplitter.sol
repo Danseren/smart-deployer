@@ -6,7 +6,7 @@ import "../UtilityContract/IUtilityContract.sol";
 import "@openzeppelin/contracts/finance/VestingWallet.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract AutoVestingSplitter is IUtilityContract, Ownable {
+abstract contract AutoVestingSplitter is IUtilityContract, Ownable {
     constructor() Ownable(msg.sender) {}
 
     struct PayeeInfo {
