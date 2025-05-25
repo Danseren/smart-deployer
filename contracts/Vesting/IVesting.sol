@@ -70,7 +70,6 @@ interface IVesting {
     // Errors
     // ------------------------------------------------------------------------
 
-
     /// @dev Error thrown when attempting to interact with a non-existent vesting schedule
     error VestingNotFound();
 
