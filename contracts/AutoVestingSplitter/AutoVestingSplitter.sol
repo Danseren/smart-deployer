@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "../UtilityContract/IUtilityContract.sol";
+import "../UtilityContract/AbstractUtilityContract.sol";
 import "@openzeppelin/contracts/finance/VestingWallet.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-abstract contract AutoVestingSplitter is IUtilityContract, Ownable {
+abstract contract AutoVestingSplitter is AbstractUtilityContract, Ownable {
     constructor() Ownable(msg.sender) {}
 
     struct PayeeInfo {
@@ -26,15 +26,9 @@ abstract contract AutoVestingSplitter is IUtilityContract, Ownable {
     event PaymentReceived(address from, uint256 amount);
     event VestedETHForwards(address indexed payee, address vestingWallet, uint256 amount);
 
-    error AlreadyInitialized();
     error InvalidInput();
     error ZeroAddress();
     error ZeroShare();
-
-    modifier notInitialized() {
-        if (initialized) revert AlreadyInitialized();
-        _;
-    }
 
     function initialize(bytes memory _initData) external override notInitialized returns (bool) {
         (address[] memory _accounts, uint256[] memory _shares, uint64 _duration, address _owner) =
