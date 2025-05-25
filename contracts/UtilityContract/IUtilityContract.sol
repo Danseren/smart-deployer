@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 
@@ -20,6 +19,9 @@ interface IUtilityContract is IERC165 {
 
     /// @dev Error thrown when deploy manager validation failed throw validateDeployManager()
     error FailedToValidateDeployManager();
+
+    /// @dev Error thrown when contract is already initialized
+    error AlreadyInitialized();
 
     // ------------------------------------------------------------------------
     // Functions

@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.3;
 
 import "../UtilityContract/AbstractUtilityContract.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
@@ -22,12 +21,6 @@ contract ERC1155Airdroper is AbstractUtilityContract, Ownable {
     /// @notice Treasury address holding the tokens for airdrop
     address public treasury;
 
-    /// @dev Flag to prevent multiple initializations
-    bool private initialized;
-
-    /// @dev Error thrown when attempting to initialize the contract more than once
-    error AlreadyInitialized();
-
     /// @dev Error thrown when the number of receivers does not match other input arrays
     error RecieversLengthMismatch();
 
@@ -39,12 +32,6 @@ contract ERC1155Airdroper is AbstractUtilityContract, Ownable {
 
     /// @dev Error thrown when the treasury has not approved the contract to transfer tokens
     error NeedToApproveTokens();
-
-    /// @notice Modifier to ensure the contract has not been initialized before
-    modifier notInitialized() {
-        require(!initialized, AlreadyInitialized());
-        _;
-    }
 
     /// @notice Performs batch airdrop of ERC1155 tokens
     /// @dev Transfers tokens from treasury to specified receivers

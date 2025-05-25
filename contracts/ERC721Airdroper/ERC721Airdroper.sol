@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.3;
 
 import "../UtilityContract/AbstractUtilityContract.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
@@ -22,12 +21,6 @@ contract ERC721Airdroper is AbstractUtilityContract, Ownable {
     /// @notice Treasury address holding the NFTs for airdrop
     address public treasury;
 
-    /// @dev Flag to prevent multiple initializations
-    bool private initialized;
-
-    /// @dev Error thrown when attempting to initialize the contract more than once
-    error AlreadyInitialized();
-
     /// @dev Error thrown when input arrays have mismatched lengths
     error ArraysLengthMismatch();
 
@@ -36,12 +29,6 @@ contract ERC721Airdroper is AbstractUtilityContract, Ownable {
 
     /// @dev Error thrown when attempting to airdrop more NFTs than the batch size limit
     error BatchSizeExceeded();
-
-    /// @dev Modifier to ensure the contract has not been initialized before
-    modifier notInitialized() {
-        require(!initialized, AlreadyInitialized());
-        _;
-    }
 
     /// @notice Performs batch airdrop of ERC721 tokens
     /// @dev Transfers NFTs from treasury to specified receivers

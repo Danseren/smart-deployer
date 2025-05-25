@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -19,14 +18,17 @@ contract DeployManager is IDeployManager, Ownable, ERC165 {
     /// @notice Structure to store information about registered utility contracts
     /// @dev Used in contractsData mapping
     struct ContractInfo {
-        uint256 fee; /// @notice Deployment fee (in wei)
-        bool isDeployable; /// @notice Shows deployable status
-        uint256 registeredAt; /// @notice Registration timestamp
+        uint256 fee;
+        /// @notice Deployment fee (in wei)
+        bool isDeployable;
+        /// @notice Shows deployable status
+        uint256 registeredAt;
     }
+    /// @notice Registration timestamp
 
     /// @notice Mapping of user addresses to their deployed contracts
     mapping(address => address[]) public deployedContracts;
-    
+
     /// @notice Mapping of utility contract addresses to their configuration
     mapping(address => ContractInfo) public contractsData;
 
@@ -59,7 +61,8 @@ contract DeployManager is IDeployManager, Ownable, ERC165 {
         );
         require(contractsData[_contractAddress].registeredAt == 0, AlreadyRegistered());
 
-        contractsData[_contractAddress] = ContractInfo({fee: _fee, isDeployable: _isActive, registeredAt: block.timestamp});
+        contractsData[_contractAddress] =
+            ContractInfo({fee: _fee, isDeployable: _isActive, registeredAt: block.timestamp});
 
         emit NewContractAdded(_contractAddress, _fee, _isActive, block.timestamp);
     }
