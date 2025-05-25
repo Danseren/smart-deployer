@@ -8,17 +8,26 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import {VestingLib} from "./VestingLib.sol";
 import "./IVesting.sol";
 
+/// @title Vesting Contract
+/// @notice Implements a token vesting mechanism with flexible scheduling
+/// @dev Allows creating vesting schedules with cliff periods, custom durations, and claim restrictions
 contract Vesting is IVesting, AbstractUtilityContract, Ownable {
+    /// @notice Use VestingLib for VestingInfo struct operations
     using VestingLib for IVesting.VestingInfo;
 
+    /// @notice Initializes the contract with deploy manager, token, and owner
     constructor() payable Ownable(msg.sender) {}
 
+    /// @notice ERC20 token used for vesting
     IERC20 public token;
 
+    /// @notice Total number of tokens currently allocated in vesting schedules
     uint256 public allocatedTokens;
 
+    /// @notice Mapping of beneficiary addresses to their vesting schedules
     mapping(address => IVesting.VestingInfo) public vestings;
 
+    /// @inheritdoc IVesting
     function claim() public {
         address claimer = msg.sender;
         VestingInfo storage vesting = vestings[claimer];
@@ -52,6 +61,7 @@ contract Vesting is IVesting, AbstractUtilityContract, Ownable {
         emit Claim(claimer, claimable, blockTimestamp);
     }
 
+    /// @inheritdoc IVesting
     function startVesting(IVesting.VestingParams calldata params) external onlyOwner {
         if (params.beneficiary == address(0)) revert InvalidBeneficiary();
         if (params.duration == 0) revert DurationCantBeZero();
@@ -96,6 +106,7 @@ contract Vesting is IVesting, AbstractUtilityContract, Ownable {
         emit VestingCreated(params.beneficiary, params.totalAmount, blockTimestamp);
     }
 
+    /// @inheritdoc IVesting
     function withdrawUnallocated(address _to) external onlyOwner {
         uint256 available = token.balanceOf(address(this)) - allocatedTokens;
 
@@ -106,6 +117,7 @@ contract Vesting is IVesting, AbstractUtilityContract, Ownable {
         emit TokensWithdrawn(_to, available);
     }
 
+    /// @inheritdoc AbstractUtilityContract
     function initialize(bytes memory _initData) external override notInitialized returns (bool) {
         (address _deployManager, address _token, address _owner) = abi.decode(_initData, (address, address, address));
 
@@ -119,14 +131,17 @@ contract Vesting is IVesting, AbstractUtilityContract, Ownable {
         return true;
     }
 
+    /// @inheritdoc IVesting
     function vestedAmount(address _claimer) public view returns (uint256) {
         return vestings[_claimer].vestedAmount();
     }
 
+    /// @inheritdoc IVesting
     function claimableAmount(address _claimer) public view returns (uint256) {
         return vestings[_claimer].claimableAmount();
     }
 
+    /// @inheritdoc IVesting
     function getInitData(address _deployManager, address _token, address _owner) external pure returns (bytes memory) {
         return abi.encode(_deployManager, _token, _owner);
     }

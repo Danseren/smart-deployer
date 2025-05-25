@@ -14,7 +14,7 @@ interface IVesting {
     /// @param lastClaimTime Timestamp of the last claim
     /// @param claimCooldown Minimum time interval between claims in seconds
     /// @param minClaimAmount Minimum amount that can be claimed in a single transaction
-    /// @param created Indicates whether the vesting schedule has been created  
+    /// @param created Indicates whether the vesting schedule has been created
     struct VestingInfo {
         uint256 totalAmount;
         uint256 startTime;
