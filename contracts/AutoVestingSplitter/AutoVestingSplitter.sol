@@ -21,8 +21,6 @@ abstract contract AutoVestingSplitter is AbstractUtilityContract, Ownable {
     PayeeInfo[] public payees;
     mapping(address => address) public vestingWalletOf;
 
-    bool private initialized;
-
     event PaymentReceived(address from, uint256 amount);
     event VestedETHForwards(address indexed payee, address vestingWallet, uint256 amount);
 
