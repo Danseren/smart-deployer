@@ -38,7 +38,7 @@ contract Vesting is IVesting, AbstractUtilityContract, Ownable {
             revert ClaimNotAvailable(blockTimestamp, vesting.startTime + vesting.cliff);
         }
 
-        if (blockTimestamp <= vesting.lastClaimTime + vesting.claimCooldown) {
+        if (vesting.lastClaimTime != 0 && blockTimestamp <= vesting.lastClaimTime + vesting.claimCooldown) {
             revert CooldownNotPassed(blockTimestamp, vesting.lastClaimTime);
         }
 
@@ -139,6 +139,11 @@ contract Vesting is IVesting, AbstractUtilityContract, Ownable {
     /// @inheritdoc IVesting
     function claimableAmount(address _claimer) public view returns (uint256) {
         return vestings[_claimer].claimableAmount();
+    }
+
+    /// @inheritdoc IVesting
+    function getVestingInfo(address _claimer) public view returns (IVesting.VestingInfo memory) {
+        return vestings[_claimer];
     }
 
     /// @inheritdoc IVesting

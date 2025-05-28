@@ -144,6 +144,11 @@ interface IVesting {
     /// @param _to Address to receive unallocated tokens
     function withdrawUnallocated(address _to) external;
 
+    /// @notice Returns the vesting info for a beneficiary
+    /// @param _claimer Address of the beneficiary
+    /// @return Vesting info for the beneficiary
+    function getVestingInfo(address _claimer) external view returns (VestingInfo memory);
+
     /// @notice Generates initialization data for the contract
     /// @param _deployManager Address of the deploy manager
     /// @param _token Address of the token contract
