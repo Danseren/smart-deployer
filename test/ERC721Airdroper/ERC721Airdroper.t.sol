@@ -28,7 +28,7 @@ contract ERC721AirdroperTest is Test {
         airdropOwner = vm.addr(1);
         treasury = vm.addr(2);
         managerOwner = vm.addr(42);
-        
+
         // Prepare test receivers with unique token IDs
         receivers = new address[](3);
         tokenIds = new uint256[](3);
@@ -46,11 +46,11 @@ contract ERC721AirdroperTest is Test {
         for (uint256 i = 0; i < 3; i++) {
             token.mint(treasury, tokenIds[i]);
         }
-        
+
         // Approve airdroper to manage tokens
         vm.prank(treasury);
         token.setApprovalForAll(address(airdroper), true);
-        
+
         // Initialize airdroper with mock deploy manager
         bytes memory initData = encodeInitData(address(mockDeployManager), address(token), treasury, airdropOwner);
         airdroper.initialize(initData);
@@ -94,7 +94,7 @@ contract ERC721AirdroperTest is Test {
         badTokenIds[0] = 1;
         badTokenIds[1] = 2;
         badTokenIds[2] = 3;
-        
+
         // Attempt airdrop with mismatched array lengths
         vm.prank(airdropOwner);
         vm.expectRevert();
@@ -106,7 +106,7 @@ contract ERC721AirdroperTest is Test {
         // Remove approval for token transfers
         vm.prank(treasury);
         token.setApprovalForAll(address(airdroper), false);
-        
+
         // Attempt airdrop without approval
         vm.prank(airdropOwner);
         vm.expectRevert();
