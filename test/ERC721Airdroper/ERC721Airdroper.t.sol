@@ -103,7 +103,9 @@ contract ERC721AirdroperTest is Test {
     }
 
     function encodeInitData(address _deployManager, address _token, address _treasury, address _owner)
-        public pure returns (bytes memory)
+        public
+        pure
+        returns (bytes memory)
     {
         return abi.encode(_deployManager, _token, _treasury, _owner);
     }
