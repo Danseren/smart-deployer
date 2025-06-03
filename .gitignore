@@ -7,3 +7,6 @@ lib/
 out/
 cache/
 artifacts/
+docs/
+node_modules/
+.mypy_cache/

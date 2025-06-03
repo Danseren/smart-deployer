@@ -1,0 +1,33 @@
+#!/bin/sh
+# ---------------------------------------------
+# Husky pre-commit hook for Foundry projects
+# Blocks commit if formatting, build or tests fail
+# ---------------------------------------------
+
+# Load Husky environment (required)
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Running Foundry pre-commit checks..."
+
+# 1. Check formatting
+# Ensures Solidity code is properly formatted
+if ! forge fmt --check; then
+  echo "❌ Formatting check failed. Please run 'forge fmt' to fix it."
+  exit 1
+fi
+
+# 2. Compile and show contract sizes
+# Fails if the build process has syntax/type errors
+if ! forge build --sizes; then
+  echo "❌ Build failed. Please fix all compiler errors."
+  exit 1
+fi
+
+# 3. Run all tests with verbose output
+# Ensures new code doesn’t break existing logic
+if ! forge test -vvv; then
+  echo "❌ Tests failed. Please check the test output and fix the issues."
+  exit 1
+fi
+
+echo "✅ All Foundry checks passed. Proceeding with commit."
