@@ -1,0 +1,1313 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="book.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com-personal/danseren/smart-deployer" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="smart-deployer"><a class="header" href="#smart-deployer">Smart Deployer</a></h1>
+<p>Smart Deployer is a universal architecture for organizing and managing paid smart contract deployments.</p>
+<p>This solution allows developers to:</p>
+<ul>
+<li>Create their own Smart Deployer (DeployManager.sol)</li>
+<li>Create &amp; connect utility contracts using template</li>
+<li>Monetize the deployment of utility contracts</li>
+</ul>
+<blockquote>
+<p>The repository is currently under development.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents"><a class="header" href="#contents">Contents</a></h1>
+<ul>
+<li><a href="contracts%5CDeployManager/DeployManager.sol%5Ccontract.DeployManager.html">DeployManager</a></li>
+<li><a href="contracts%5CDeployManager/IDeployManager.sol%5Cinterface.IDeployManager.html">IDeployManager</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="deploymanager"><a class="header" href="#deploymanager">DeployManager</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CDeployManager%5CDeployManager.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+<a href="contracts%5CDeployManager%5CDeployManager.sol//contracts%5CDeployManager%5CIDeployManager.sol%5Cinterface.IDeployManager.html">IDeployManager</a>, Ownable, ERC165</p>
+<p>Manages the deployment of utility contracts using minimal proxy pattern</p>
+<p><em>Implements IDeployManager interface and inherits from OpenZeppelin's Ownable and ERC165</em></p>
+<h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
+<h3 id="deployedcontracts"><a class="header" href="#deployedcontracts">deployedContracts</a></h3>
+<p>Registration timestamp</p>
+<p>Mapping of user addresses to their deployed contracts</p>
+<pre><code class="language-solidity">mapping(address =&gt; address[]) public deployedContracts;
+</code></pre>
+<h3 id="contractsdata"><a class="header" href="#contractsdata">contractsData</a></h3>
+<p>Mapping of utility contract addresses to their configuration</p>
+<pre><code class="language-solidity">mapping(address =&gt; ContractInfo) public contractsData;
+</code></pre>
+<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<h3 id="constructor"><a class="header" href="#constructor">constructor</a></h3>
+<p>Initializes the contract and sets the owner</p>
+<p><em>Calls Ownable constructor with msg.sender</em></p>
+<pre><code class="language-solidity">constructor() payable Ownable(msg.sender);
+</code></pre>
+<h3 id="deploy"><a class="header" href="#deploy">deploy</a></h3>
+<p>Deploys a new contract</p>
+<p><em>Emits NewDeployment event</em></p>
+<pre><code class="language-solidity">function deploy(address _utilityContract, bytes calldata _initData) external payable override returns (address);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_utilityContract</code></td><td><code>address</code></td><td>Address of the registered utility contract</td></tr>
+<tr><td><code>_initData</code></td><td><code>bytes</code></td><td>Initialization data for the contract</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>Address of the deployed contract</td></tr>
+</tbody></table>
+</div>
+<h3 id="addnewcontract"><a class="header" href="#addnewcontract">addNewContract</a></h3>
+<p>Adds a new contract to the system</p>
+<p><em>Emits NewContractAdded event</em></p>
+<pre><code class="language-solidity">function addNewContract(address _contractAddress, uint256 _fee, bool _isActive) external override onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the registered utility contract</td></tr>
+<tr><td><code>_fee</code></td><td><code>uint256</code></td><td>Deployment fee</td></tr>
+<tr><td><code>_isActive</code></td><td><code>bool</code></td><td>Initial active status</td></tr>
+</tbody></table>
+</div>
+<h3 id="updatefee"><a class="header" href="#updatefee">updateFee</a></h3>
+<p>Updates the fee for an existing contract</p>
+<p><em>Emits ContractFeeUpdated event</em></p>
+<pre><code class="language-solidity">function updateFee(address _contractAddress, uint256 _newFee) external override onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the contract</td></tr>
+<tr><td><code>_newFee</code></td><td><code>uint256</code></td><td>New fee (in wei) required for the deployment</td></tr>
+</tbody></table>
+</div>
+<h3 id="deactivatecontract"><a class="header" href="#deactivatecontract">deactivateContract</a></h3>
+<p>Deactivates an existing contract</p>
+<p><em>Emits ContractStatusUpdated event</em></p>
+<pre><code class="language-solidity">function deactivateContract(address _address) external override onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_address</code></td><td><code>address</code></td><td></td></tr>
+</tbody></table>
+</div>
+<h3 id="activatecontract"><a class="header" href="#activatecontract">activateContract</a></h3>
+<p>Activates an existing contract</p>
+<p><em>Emits ContractStatusUpdated event</em></p>
+<pre><code class="language-solidity">function activateContract(address _address) external override onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_address</code></td><td><code>address</code></td><td></td></tr>
+</tbody></table>
+</div>
+<h3 id="supportsinterface"><a class="header" href="#supportsinterface">supportsInterface</a></h3>
+<p>Checks if contract supports specific interface</p>
+<p><em>Implementation of IERC165 interface detection</em></p>
+<pre><code class="language-solidity">function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>interfaceId</code></td><td><code>bytes4</code></td><td>The interface identifier to check</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>bool True if interface is supported</td></tr>
+</tbody></table>
+</div>
+<h2 id="structs"><a class="header" href="#structs">Structs</a></h2>
+<h3 id="contractinfo"><a class="header" href="#contractinfo">ContractInfo</a></h3>
+<p>Structure to store information about registered utility contracts</p>
+<p><em>Used in contractsData mapping</em></p>
+<pre><code class="language-solidity">struct ContractInfo {
+    uint256 fee;
+    bool isDeployable;
+    uint256 registeredAt;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ideploymanager"><a class="header" href="#ideploymanager">IDeployManager</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CDeployManager%5CIDeployManager.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+IERC165</p>
+<p>Interface for managing contract deployments</p>
+<p><em>Implements IERC165 for ERC165 standard support</em></p>
+<h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
+<h3 id="deploy-1"><a class="header" href="#deploy-1">deploy</a></h3>
+<p>Deploys a new contract</p>
+<p><em>Emits NewDeployment event</em></p>
+<pre><code class="language-solidity">function deploy(address _utilityContract, bytes calldata _initData) external payable returns (address);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_utilityContract</code></td><td><code>address</code></td><td>Address of the registered utility contract</td></tr>
+<tr><td><code>_initData</code></td><td><code>bytes</code></td><td>Initialization data for the contract</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>Address of the deployed contract</td></tr>
+</tbody></table>
+</div>
+<h3 id="addnewcontract-1"><a class="header" href="#addnewcontract-1">addNewContract</a></h3>
+<p>Adds a new contract to the system</p>
+<p><em>Emits NewContractAdded event</em></p>
+<pre><code class="language-solidity">function addNewContract(address _contractAddress, uint256 _fee, bool _isActive) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the registered utility contract</td></tr>
+<tr><td><code>_fee</code></td><td><code>uint256</code></td><td>Deployment fee</td></tr>
+<tr><td><code>_isActive</code></td><td><code>bool</code></td><td>Initial active status</td></tr>
+</tbody></table>
+</div>
+<h3 id="updatefee-1"><a class="header" href="#updatefee-1">updateFee</a></h3>
+<p>Updates the fee for an existing contract</p>
+<p><em>Emits ContractFeeUpdated event</em></p>
+<pre><code class="language-solidity">function updateFee(address _contractAddress, uint256 _newFee) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the contract</td></tr>
+<tr><td><code>_newFee</code></td><td><code>uint256</code></td><td>New fee (in wei) required for the deployment</td></tr>
+</tbody></table>
+</div>
+<h3 id="deactivatecontract-1"><a class="header" href="#deactivatecontract-1">deactivateContract</a></h3>
+<p>Deactivates an existing contract</p>
+<p><em>Emits ContractStatusUpdated event</em></p>
+<pre><code class="language-solidity">function deactivateContract(address _contractAddress) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the contract to deactivate</td></tr>
+</tbody></table>
+</div>
+<h3 id="activatecontract-1"><a class="header" href="#activatecontract-1">activateContract</a></h3>
+<p>Activates an existing contract</p>
+<p><em>Emits ContractStatusUpdated event</em></p>
+<pre><code class="language-solidity">function activateContract(address _contractAddress) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the contract to activate</td></tr>
+</tbody></table>
+</div>
+<h2 id="events"><a class="header" href="#events">Events</a></h2>
+<h3 id="newcontractadded"><a class="header" href="#newcontractadded">NewContractAdded</a></h3>
+<p>Event emitted when a new utility contract template is registered</p>
+<pre><code class="language-solidity">event NewContractAdded(address indexed _contractAddress, uint256 _fee, bool _isActive, uint256 _timestamp);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the registered utility contract template</td></tr>
+<tr><td><code>_fee</code></td><td><code>uint256</code></td><td>Fee (in wei) required to deploy a clone of this contract</td></tr>
+<tr><td><code>_isActive</code></td><td><code>bool</code></td><td>Contract active status, indicating whether the contract is active and ready to be deployed</td></tr>
+<tr><td><code>_timestamp</code></td><td><code>uint256</code></td><td>Timestamp indicating when the contract was added</td></tr>
+</tbody></table>
+</div>
+<h3 id="contractfeeupdated"><a class="header" href="#contractfeeupdated">ContractFeeUpdated</a></h3>
+<p>Event emitted when a contract's fee is updated</p>
+<pre><code class="language-solidity">event ContractFeeUpdated(address indexed _contractAddress, uint256 _oldFee, uint256 _newFee, uint256 _timestamp);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the registered contract</td></tr>
+<tr><td><code>_oldFee</code></td><td><code>uint256</code></td><td>Fee (in wei) required to deploy contract before update</td></tr>
+<tr><td><code>_newFee</code></td><td><code>uint256</code></td><td>Fee (in wei) required to deploy contract after update</td></tr>
+<tr><td><code>_timestamp</code></td><td><code>uint256</code></td><td>Timestamp indicating when the fee was updated</td></tr>
+</tbody></table>
+</div>
+<h3 id="contractstatusupdated"><a class="header" href="#contractstatusupdated">ContractStatusUpdated</a></h3>
+<p>Event emitted when a contract's status is updated</p>
+<pre><code class="language-solidity">event ContractStatusUpdated(address indexed _contractAddress, bool _isActive, uint256 _timestamp);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the registered contract</td></tr>
+<tr><td><code>_isActive</code></td><td><code>bool</code></td><td>New active status</td></tr>
+<tr><td><code>_timestamp</code></td><td><code>uint256</code></td><td>Timestamp indicating when the status was updated</td></tr>
+</tbody></table>
+</div>
+<h3 id="newdeployment"><a class="header" href="#newdeployment">NewDeployment</a></h3>
+<p>Event emitted on new deployment</p>
+<pre><code class="language-solidity">event NewDeployment(address indexed _deployer, address indexed _contractAddress, uint256 _fee, uint256 _timestamp);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployer</code></td><td><code>address</code></td><td>Address of the deployer</td></tr>
+<tr><td><code>_contractAddress</code></td><td><code>address</code></td><td>Address of the deployed contract</td></tr>
+<tr><td><code>_fee</code></td><td><code>uint256</code></td><td>Fee (in wei) paid for deployment</td></tr>
+<tr><td><code>_timestamp</code></td><td><code>uint256</code></td><td>Timestamp indicating when the deployment occurred</td></tr>
+</tbody></table>
+</div>
+<h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
+<h3 id="contractnotactive"><a class="header" href="#contractnotactive">ContractNotActive</a></h3>
+<p><em>Error thrown when attempting to use an inactive contract</em></p>
+<pre><code class="language-solidity">error ContractNotActive();
+</code></pre>
+<h3 id="notenoghtfunds"><a class="header" href="#notenoghtfunds">NotEnoghtFunds</a></h3>
+<p><em>Error thrown when there are insufficient funds</em></p>
+<pre><code class="language-solidity">error NotEnoghtFunds();
+</code></pre>
+<h3 id="contractdoesnotregistered"><a class="header" href="#contractdoesnotregistered">ContractDoesNotRegistered</a></h3>
+<p><em>Error thrown when attempting to use an unregistered contract</em></p>
+<pre><code class="language-solidity">error ContractDoesNotRegistered();
+</code></pre>
+<h3 id="initializationfailed"><a class="header" href="#initializationfailed">InitializationFailed</a></h3>
+<p><em>Error thrown when contract initialization fails</em></p>
+<pre><code class="language-solidity">error InitializationFailed();
+</code></pre>
+<h3 id="contractisnotutilitycontract"><a class="header" href="#contractisnotutilitycontract">ContractIsNotUtilityContract</a></h3>
+<p><em>Error thrown when attempting to use a non-utility contract</em></p>
+<pre><code class="language-solidity">error ContractIsNotUtilityContract();
+</code></pre>
+<h3 id="alreadyregistered"><a class="header" href="#alreadyregistered">AlreadyRegistered</a></h3>
+<p><em>Error thrown when contracts already registered</em></p>
+<pre><code class="language-solidity">error AlreadyRegistered();
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents-1"><a class="header" href="#contents-1">Contents</a></h1>
+<ul>
+<li><a href="contracts%5CERC1155Airdroper/ERC1155Airdroper.sol%5Ccontract.ERC1155Airdroper.html">ERC1155Airdroper</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="erc1155airdroper"><a class="header" href="#erc1155airdroper">ERC1155Airdroper</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CERC1155Airdroper%5CERC1155Airdroper.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+<a href="contracts%5CERC1155Airdroper%5CERC1155Airdroper.sol//contracts%5CUtilityContract%5CAbstractUtilityContract.sol%5Cabstract.AbstractUtilityContract.html">AbstractUtilityContract</a>, Ownable</p>
+<p>Utility contract for batch airdropping ERC1155 tokens</p>
+<p><em>Inherits from AbstractUtilityContract and Ownable for deployment and access control</em></p>
+<h2 id="state-variables-1"><a class="header" href="#state-variables-1">State Variables</a></h2>
+<h3 id="max_airdrop_batch_size"><a class="header" href="#max_airdrop_batch_size">MAX_AIRDROP_BATCH_SIZE</a></h3>
+<p>Maximum number of tokens that can be airdropped in a single transaction</p>
+<pre><code class="language-solidity">uint256 public constant MAX_AIRDROP_BATCH_SIZE = 10;
+</code></pre>
+<h3 id="token"><a class="header" href="#token">token</a></h3>
+<p>ERC1155 token contract to be used for airdrops</p>
+<pre><code class="language-solidity">IERC1155 public token;
+</code></pre>
+<h3 id="treasury"><a class="header" href="#treasury">treasury</a></h3>
+<p>Treasury address holding the tokens for airdrop</p>
+<pre><code class="language-solidity">address public treasury;
+</code></pre>
+<h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">constructor</a></h3>
+<p>Constructor initializes the contract with the sender as the initial owner</p>
+<pre><code class="language-solidity">constructor() payable Ownable(msg.sender);
+</code></pre>
+<h3 id="airdrop"><a class="header" href="#airdrop">airdrop</a></h3>
+<p>Performs batch airdrop of ERC1155 tokens</p>
+<p><em>Transfers tokens from treasury to specified receivers</em></p>
+<pre><code class="language-solidity">function airdrop(address[] calldata receivers, uint256[] calldata amounts, uint256[] calldata tokenIds)
+    external
+    onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>receivers</code></td><td><code>address[]</code></td><td>Array of recipient addresses</td></tr>
+<tr><td><code>amounts</code></td><td><code>uint256[]</code></td><td>Array of token amounts to transfer</td></tr>
+<tr><td><code>tokenIds</code></td><td><code>uint256[]</code></td><td>Array of token IDs to transfer</td></tr>
+</tbody></table>
+</div>
+<h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
+<p>Initializes the utility contract with provided data</p>
+<p><em>Initializes the contract with deploy manager, token, treasury, and owner</em></p>
+<pre><code class="language-solidity">function initialize(bytes memory _initData) external override notInitialized returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_initData</code></td><td><code>bytes</code></td><td>Encoded initialization parameters</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>bool Success status of initialization</td></tr>
+</tbody></table>
+</div>
+<h3 id="getinitdata"><a class="header" href="#getinitdata">getInitData</a></h3>
+<p>Generates initialization data for the contract</p>
+<p><em>Encodes initialization parameters for use with deploy manager</em></p>
+<pre><code class="language-solidity">function getInitData(address _deployManager, address _token, address _treasury, address _owner)
+    external
+    pure
+    returns (bytes memory);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployManager</code></td><td><code>address</code></td><td>Address of the deploy manager</td></tr>
+<tr><td><code>_token</code></td><td><code>address</code></td><td>Address of the ERC1155 token contract</td></tr>
+<tr><td><code>_treasury</code></td><td><code>address</code></td><td>Address of the treasury holding tokens</td></tr>
+<tr><td><code>_owner</code></td><td><code>address</code></td><td>Address of the contract owner</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bytes</code></td><td>bytes Encoded initialization data</td></tr>
+</tbody></table>
+</div>
+<h2 id="errors-1"><a class="header" href="#errors-1">Errors</a></h2>
+<h3 id="recieverslengthmismatch"><a class="header" href="#recieverslengthmismatch">RecieversLengthMismatch</a></h3>
+<p><em>Error thrown when the number of receivers does not match other input arrays</em></p>
+<pre><code class="language-solidity">error RecieversLengthMismatch();
+</code></pre>
+<h3 id="amountslengthmismatch"><a class="header" href="#amountslengthmismatch">AmountsLengthMismatch</a></h3>
+<p><em>Error thrown when the number of amounts does not match other input arrays</em></p>
+<pre><code class="language-solidity">error AmountsLengthMismatch();
+</code></pre>
+<h3 id="batchsizeexceeded"><a class="header" href="#batchsizeexceeded">BatchSizeExceeded</a></h3>
+<p><em>Error thrown when attempting to airdrop more tokens than the batch size limit</em></p>
+<pre><code class="language-solidity">error BatchSizeExceeded();
+</code></pre>
+<h3 id="needtoapprovetokens"><a class="header" href="#needtoapprovetokens">NeedToApproveTokens</a></h3>
+<p><em>Error thrown when the treasury has not approved the contract to transfer tokens</em></p>
+<pre><code class="language-solidity">error NeedToApproveTokens();
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents-2"><a class="header" href="#contents-2">Contents</a></h1>
+<ul>
+<li><a href="contracts%5CERC20Airdroper/ERC20Airdroper.sol%5Ccontract.ERC20Airdroper.html">ERC20Airdroper</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="erc20airdroper"><a class="header" href="#erc20airdroper">ERC20Airdroper</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CERC20Airdroper%5CERC20Airdroper.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+<a href="contracts%5CERC20Airdroper%5CERC20Airdroper.sol//contracts%5CUtilityContract%5CAbstractUtilityContract.sol%5Cabstract.AbstractUtilityContract.html">AbstractUtilityContract</a>, Ownable</p>
+<p>Utility contract for batch airdropping ERC20 tokens</p>
+<p><em>Inherits from AbstractUtilityContract and Ownable for deployment and access control</em></p>
+<h2 id="state-variables-2"><a class="header" href="#state-variables-2">State Variables</a></h2>
+<h3 id="max_airdrop_batch_size-1"><a class="header" href="#max_airdrop_batch_size-1">MAX_AIRDROP_BATCH_SIZE</a></h3>
+<p>Maximum number of recipients that can be airdropped to in a single transaction</p>
+<pre><code class="language-solidity">uint256 public constant MAX_AIRDROP_BATCH_SIZE = 300;
+</code></pre>
+<h3 id="token-1"><a class="header" href="#token-1">token</a></h3>
+<p>ERC20 token contract to be used for airdrops</p>
+<pre><code class="language-solidity">IERC20 public token;
+</code></pre>
+<h3 id="amount"><a class="header" href="#amount">amount</a></h3>
+<p>Amount of tokens to be distributed to each recipient</p>
+<pre><code class="language-solidity">uint256 public amount;
+</code></pre>
+<h3 id="treasury-1"><a class="header" href="#treasury-1">treasury</a></h3>
+<p>Treasury address holding the tokens for airdrop</p>
+<pre><code class="language-solidity">address public treasury;
+</code></pre>
+<h2 id="functions-3"><a class="header" href="#functions-3">Functions</a></h2>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">constructor</a></h3>
+<p>Constructor initializes the contract with the sender as the initial owner</p>
+<pre><code class="language-solidity">constructor() payable Ownable(msg.sender);
+</code></pre>
+<h3 id="airdrop-1"><a class="header" href="#airdrop-1">airdrop</a></h3>
+<p>Performs batch airdrop of ERC20 tokens</p>
+<p><em>Transfers tokens from treasury to specified receivers</em></p>
+<pre><code class="language-solidity">function airdrop(address[] calldata receivers, uint256[] calldata amounts) external onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>receivers</code></td><td><code>address[]</code></td><td>Array of recipient addresses</td></tr>
+<tr><td><code>amounts</code></td><td><code>uint256[]</code></td><td>Array of token amounts to transfer to each recipient</td></tr>
+</tbody></table>
+</div>
+<h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
+<p>Initializes the utility contract with provided data</p>
+<p><em>Initializes the contract with deploy manager, token, amount, treasury, and owner</em></p>
+<pre><code class="language-solidity">function initialize(bytes memory _initData) external override notInitialized returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_initData</code></td><td><code>bytes</code></td><td>Encoded initialization parameters</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>bool Success status of initialization</td></tr>
+</tbody></table>
+</div>
+<h3 id="getinitdata-1"><a class="header" href="#getinitdata-1">getInitData</a></h3>
+<p>Generates initialization data for the contract</p>
+<p><em>Encodes initialization parameters for use with deploy manager</em></p>
+<pre><code class="language-solidity">function getInitData(address _deployManager, address _token, uint256 _amount, address _treasury, address _owner)
+    external
+    pure
+    returns (bytes memory);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployManager</code></td><td><code>address</code></td><td>Address of the deploy manager</td></tr>
+<tr><td><code>_token</code></td><td><code>address</code></td><td>Address of the ERC20 token contract</td></tr>
+<tr><td><code>_amount</code></td><td><code>uint256</code></td><td>Amount of tokens to be distributed to each recipient</td></tr>
+<tr><td><code>_treasury</code></td><td><code>address</code></td><td>Address of the treasury holding tokens</td></tr>
+<tr><td><code>_owner</code></td><td><code>address</code></td><td>Address of the contract owner</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bytes</code></td><td>bytes Encoded initialization data</td></tr>
+</tbody></table>
+</div>
+<h2 id="errors-2"><a class="header" href="#errors-2">Errors</a></h2>
+<h3 id="arrayslengthmismatch"><a class="header" href="#arrayslengthmismatch">ArraysLengthMismatch</a></h3>
+<p><em>Error thrown when input arrays have mismatched lengths</em></p>
+<pre><code class="language-solidity">error ArraysLengthMismatch();
+</code></pre>
+<h3 id="notenoughapprovedtokens"><a class="header" href="#notenoughapprovedtokens">NotEnoughApprovedTokens</a></h3>
+<p><em>Error thrown when the treasury has not approved enough tokens</em></p>
+<pre><code class="language-solidity">error NotEnoughApprovedTokens();
+</code></pre>
+<h3 id="transferfailed"><a class="header" href="#transferfailed">TransferFailed</a></h3>
+<p><em>Error thrown when token transfer fails</em></p>
+<pre><code class="language-solidity">error TransferFailed();
+</code></pre>
+<h3 id="batchsizeexceeded-1"><a class="header" href="#batchsizeexceeded-1">BatchSizeExceeded</a></h3>
+<p><em>Error thrown when attempting to airdrop to more recipients than the batch size limit</em></p>
+<pre><code class="language-solidity">error BatchSizeExceeded();
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents-3"><a class="header" href="#contents-3">Contents</a></h1>
+<ul>
+<li><a href="contracts%5CERC721Airdroper/ERC721Airdroper.sol%5Ccontract.ERC721Airdroper.html">ERC721Airdroper</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="erc721airdroper"><a class="header" href="#erc721airdroper">ERC721Airdroper</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CERC721Airdroper%5CERC721Airdroper.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+<a href="contracts%5CERC721Airdroper%5CERC721Airdroper.sol//contracts%5CUtilityContract%5CAbstractUtilityContract.sol%5Cabstract.AbstractUtilityContract.html">AbstractUtilityContract</a>, Ownable</p>
+<p>Utility contract for batch airdropping ERC721 tokens</p>
+<p><em>Inherits from AbstractUtilityContract and Ownable for deployment and access control</em></p>
+<h2 id="state-variables-3"><a class="header" href="#state-variables-3">State Variables</a></h2>
+<h3 id="max_airdrop_batch_size-2"><a class="header" href="#max_airdrop_batch_size-2">MAX_AIRDROP_BATCH_SIZE</a></h3>
+<p>Maximum number of NFTs that can be airdropped in a single transaction</p>
+<pre><code class="language-solidity">uint256 public constant MAX_AIRDROP_BATCH_SIZE = 300;
+</code></pre>
+<h3 id="token-2"><a class="header" href="#token-2">token</a></h3>
+<p>ERC721 token contract to be used for airdrops</p>
+<pre><code class="language-solidity">IERC721 public token;
+</code></pre>
+<h3 id="treasury-2"><a class="header" href="#treasury-2">treasury</a></h3>
+<p>Treasury address holding the NFTs for airdrop</p>
+<pre><code class="language-solidity">address public treasury;
+</code></pre>
+<h2 id="functions-4"><a class="header" href="#functions-4">Functions</a></h2>
+<h3 id="constructor-3"><a class="header" href="#constructor-3">constructor</a></h3>
+<p>Constructor initializes the contract with the sender as the initial owner</p>
+<pre><code class="language-solidity">constructor() payable Ownable(msg.sender);
+</code></pre>
+<h3 id="airdrop-2"><a class="header" href="#airdrop-2">airdrop</a></h3>
+<p>Performs batch airdrop of ERC721 tokens</p>
+<p><em>Transfers NFTs from treasury to specified receivers</em></p>
+<pre><code class="language-solidity">function airdrop(address[] calldata receivers, uint256[] calldata tokenIds) external onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>receivers</code></td><td><code>address[]</code></td><td>Array of recipient addresses</td></tr>
+<tr><td><code>tokenIds</code></td><td><code>uint256[]</code></td><td>Array of token IDs to transfer</td></tr>
+</tbody></table>
+</div>
+<h3 id="initialize-2"><a class="header" href="#initialize-2">initialize</a></h3>
+<p>Initializes the utility contract with provided data</p>
+<p><em>Initializes the contract with deploy manager, token, treasury, and owner</em></p>
+<pre><code class="language-solidity">function initialize(bytes memory _initData) external override notInitialized returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_initData</code></td><td><code>bytes</code></td><td>Encoded initialization parameters</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>bool Success status of initialization</td></tr>
+</tbody></table>
+</div>
+<h3 id="getinitdata-2"><a class="header" href="#getinitdata-2">getInitData</a></h3>
+<p>Generates initialization data for the contract</p>
+<p><em>Encodes initialization parameters for use with deploy manager</em></p>
+<pre><code class="language-solidity">function getInitData(address _deployManager, address _token, address _treasury, address _owner)
+    external
+    pure
+    returns (bytes memory);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployManager</code></td><td><code>address</code></td><td>Address of the deploy manager</td></tr>
+<tr><td><code>_token</code></td><td><code>address</code></td><td>Address of the ERC721 token contract</td></tr>
+<tr><td><code>_treasury</code></td><td><code>address</code></td><td>Address of the treasury holding NFTs</td></tr>
+<tr><td><code>_owner</code></td><td><code>address</code></td><td>Address of the contract owner</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bytes</code></td><td>bytes Encoded initialization data</td></tr>
+</tbody></table>
+</div>
+<h2 id="errors-3"><a class="header" href="#errors-3">Errors</a></h2>
+<h3 id="arrayslengthmismatch-1"><a class="header" href="#arrayslengthmismatch-1">ArraysLengthMismatch</a></h3>
+<p><em>Error thrown when input arrays have mismatched lengths</em></p>
+<pre><code class="language-solidity">error ArraysLengthMismatch();
+</code></pre>
+<h3 id="needtoapprovetokens-1"><a class="header" href="#needtoapprovetokens-1">NeedToApproveTokens</a></h3>
+<p><em>Error thrown when the treasury has not approved the contract to transfer tokens</em></p>
+<pre><code class="language-solidity">error NeedToApproveTokens();
+</code></pre>
+<h3 id="batchsizeexceeded-2"><a class="header" href="#batchsizeexceeded-2">BatchSizeExceeded</a></h3>
+<p><em>Error thrown when attempting to airdrop more NFTs than the batch size limit</em></p>
+<pre><code class="language-solidity">error BatchSizeExceeded();
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents-4"><a class="header" href="#contents-4">Contents</a></h1>
+<ul>
+<li><a href="contracts%5CUtilityContract/AbstractUtilityContract.sol%5Cabstract.AbstractUtilityContract.html">AbstractUtilityContract</a></li>
+<li><a href="contracts%5CUtilityContract/IUtilityContract.sol%5Cinterface.IUtilityContract.html">IUtilityContract</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="abstractutilitycontract"><a class="header" href="#abstractutilitycontract">AbstractUtilityContract</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CUtilityContract%5CAbstractUtilityContract.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+<a href="contracts%5CUtilityContract%5CAbstractUtilityContract.sol//contracts%5CUtilityContract%5CIUtilityContract.sol%5Cinterface.IUtilityContract.html">IUtilityContract</a>, ERC165</p>
+<p>Base abstract contract for utility contracts managed by DeployManager</p>
+<p><em>Provides core implementation for utility contract initialization and deploy manager validation</em></p>
+<h2 id="state-variables-4"><a class="header" href="#state-variables-4">State Variables</a></h2>
+<h3 id="initialized"><a class="header" href="#initialized">initialized</a></h3>
+<p>Indicates whether the contract is initialized</p>
+<p><em>Used to prevent multiple initialization calls</em></p>
+<pre><code class="language-solidity">bool public initialized;
+</code></pre>
+<h3 id="deploymanager-1"><a class="header" href="#deploymanager-1">deployManager</a></h3>
+<p>Address of the deploy manager for this utility contract</p>
+<p><em>Stores the address of the contract responsible for deploying this utility contract</em></p>
+<pre><code class="language-solidity">address public deployManager;
+</code></pre>
+<h2 id="functions-5"><a class="header" href="#functions-5">Functions</a></h2>
+<h3 id="notinitialized"><a class="header" href="#notinitialized">notInitialized</a></h3>
+<p>Modifier to prevent multiple initialization calls</p>
+<p><em>Checks if the contract is already initialized</em></p>
+<pre><code class="language-solidity">modifier notInitialized();
+</code></pre>
+<h3 id="initialize-3"><a class="header" href="#initialize-3">initialize</a></h3>
+<p>Initializes the utility contract with provided data</p>
+<p><em>This function should be called by the DeployManager after deploying the contract</em></p>
+<pre><code class="language-solidity">function initialize(bytes memory _initData) external virtual override returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_initData</code></td><td><code>bytes</code></td><td>Encoded initialization parameters</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>bool Success status of initialization</td></tr>
+</tbody></table>
+</div>
+<h3 id="setdeploymanager"><a class="header" href="#setdeploymanager">setDeployManager</a></h3>
+<p>Internal method to set the deploy manager address</p>
+<p><em>Validates the deploy manager before setting</em></p>
+<pre><code class="language-solidity">function setDeployManager(address _deployManager) internal virtual;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployManager</code></td><td><code>address</code></td><td>Address of the deploy manager to set</td></tr>
+</tbody></table>
+</div>
+<h3 id="validatedeploymanager"><a class="header" href="#validatedeploymanager">validateDeployManager</a></h3>
+<p>Validates the deploy manager address</p>
+<p><em>Checks that the address is not zero and supports the IDeployManager interface</em></p>
+<pre><code class="language-solidity">function validateDeployManager(address _deployManager) internal view returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployManager</code></td><td><code>address</code></td><td>Address to validate</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>bool Indicates whether the deploy manager is valid</td></tr>
+</tbody></table>
+</div>
+<h3 id="getdeploymanager"><a class="header" href="#getdeploymanager">getDeployManager</a></h3>
+<p>Returns the address of the deploy manager</p>
+<p><em>Used to verify contract deployment origin</em></p>
+<pre><code class="language-solidity">function getDeployManager() external view virtual override returns (address);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>address The address of the deploy manager</td></tr>
+</tbody></table>
+</div>
+<h3 id="supportsinterface-1"><a class="header" href="#supportsinterface-1">supportsInterface</a></h3>
+<pre><code class="language-solidity">function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iutilitycontract"><a class="header" href="#iutilitycontract">IUtilityContract</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CUtilityContract%5CIUtilityContract.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+IERC165</p>
+<p>Defines the base interface that all utility contracts must implement</p>
+<p><em>Utility contracts should implement this interface to be compatible with the DeployManager.</em></p>
+<h2 id="functions-6"><a class="header" href="#functions-6">Functions</a></h2>
+<h3 id="initialize-4"><a class="header" href="#initialize-4">initialize</a></h3>
+<p>Initializes the utility contract with provided data</p>
+<p><em>This function should be called by the DeployManager after deploying the contract</em></p>
+<pre><code class="language-solidity">function initialize(bytes memory _initData) external returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_initData</code></td><td><code>bytes</code></td><td>Encoded initialization parameters</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>bool Success status of initialization</td></tr>
+</tbody></table>
+</div>
+<h3 id="getdeploymanager-1"><a class="header" href="#getdeploymanager-1">getDeployManager</a></h3>
+<p>Returns the address of the deploy manager</p>
+<p><em>Used to verify contract deployment origin</em></p>
+<pre><code class="language-solidity">function getDeployManager() external view returns (address);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>address The address of the deploy manager</td></tr>
+</tbody></table>
+</div>
+<h2 id="errors-4"><a class="header" href="#errors-4">Errors</a></h2>
+<h3 id="deploymanagercannotbezero"><a class="header" href="#deploymanagercannotbezero">DeployManagerCannotBeZero</a></h3>
+<p><em>Error thrown when deploy manager address is zero</em></p>
+<pre><code class="language-solidity">error DeployManagerCannotBeZero();
+</code></pre>
+<h3 id="notdeploymanager"><a class="header" href="#notdeploymanager">NotDeployManager</a></h3>
+<p><em>Error thrown when caller is not the deploy manager</em></p>
+<pre><code class="language-solidity">error NotDeployManager();
+</code></pre>
+<h3 id="failedtovalidatedeploymanager"><a class="header" href="#failedtovalidatedeploymanager">FailedToValidateDeployManager</a></h3>
+<p><em>Error thrown when deploy manager validation failed throw validateDeployManager()</em></p>
+<pre><code class="language-solidity">error FailedToValidateDeployManager();
+</code></pre>
+<h3 id="alreadyinitialized"><a class="header" href="#alreadyinitialized">AlreadyInitialized</a></h3>
+<p><em>Error thrown when contract is already initialized</em></p>
+<pre><code class="language-solidity">error AlreadyInitialized();
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents-5"><a class="header" href="#contents-5">Contents</a></h1>
+<ul>
+<li><a href="contracts%5CVesting/IVesting.sol%5Cinterface.IVesting.html">IVesting</a></li>
+<li><a href="contracts%5CVesting/Vesting.sol%5Ccontract.Vesting.html">Vesting</a></li>
+<li><a href="contracts%5CVesting/VestingLib.sol%5Clibrary.VestingLib.html">VestingLib</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ivesting"><a class="header" href="#ivesting">IVesting</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CVesting%5CIVesting.sol">Git Source</a></p>
+<p>Defines the core functionality for a token vesting contract</p>
+<p><em>Provides structures and methods for creating and managing token vesting schedules</em></p>
+<h2 id="functions-7"><a class="header" href="#functions-7">Functions</a></h2>
+<h3 id="claim"><a class="header" href="#claim">claim</a></h3>
+<p>Allows beneficiary to claim vested tokens</p>
+<pre><code class="language-solidity">function claim() external;
+</code></pre>
+<h3 id="startvesting"><a class="header" href="#startvesting">startVesting</a></h3>
+<p>Starts a new vesting schedule</p>
+<pre><code class="language-solidity">function startVesting(VestingParams calldata params) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>params</code></td><td><code>VestingParams</code></td><td>Vesting parameters for the new schedule</td></tr>
+</tbody></table>
+</div>
+<h3 id="vestedamount"><a class="header" href="#vestedamount">vestedAmount</a></h3>
+<p>Calculates the total amount of tokens vested for a beneficiary</p>
+<pre><code class="language-solidity">function vestedAmount(address _claimer) external view returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_claimer</code></td><td><code>address</code></td><td>Address of the beneficiary</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Total vested amount</td></tr>
+</tbody></table>
+</div>
+<h3 id="claimableamount"><a class="header" href="#claimableamount">claimableAmount</a></h3>
+<p>Calculates the amount of tokens currently claimable</p>
+<pre><code class="language-solidity">function claimableAmount(address _claimer) external view returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_claimer</code></td><td><code>address</code></td><td>Address of the beneficiary</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Claimable amount of tokens</td></tr>
+</tbody></table>
+</div>
+<h3 id="withdrawunallocated"><a class="header" href="#withdrawunallocated">withdrawUnallocated</a></h3>
+<p>Withdraws unallocated tokens</p>
+<pre><code class="language-solidity">function withdrawUnallocated(address _to) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_to</code></td><td><code>address</code></td><td>Address to receive unallocated tokens</td></tr>
+</tbody></table>
+</div>
+<h3 id="getvestinginfo"><a class="header" href="#getvestinginfo">getVestingInfo</a></h3>
+<p>Returns the vesting info for a beneficiary</p>
+<pre><code class="language-solidity">function getVestingInfo(address _claimer) external view returns (VestingInfo memory);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_claimer</code></td><td><code>address</code></td><td>Address of the beneficiary</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>VestingInfo</code></td><td>Vesting info for the beneficiary</td></tr>
+</tbody></table>
+</div>
+<h3 id="getinitdata-3"><a class="header" href="#getinitdata-3">getInitData</a></h3>
+<p>Generates initialization data for the contract</p>
+<pre><code class="language-solidity">function getInitData(address _deployManager, address _token, address _owner) external view returns (bytes memory);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployManager</code></td><td><code>address</code></td><td>Address of the deploy manager</td></tr>
+<tr><td><code>_token</code></td><td><code>address</code></td><td>Address of the token contract</td></tr>
+<tr><td><code>_owner</code></td><td><code>address</code></td><td>Address of the contract owner</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bytes</code></td><td>Encoded initialization data</td></tr>
+</tbody></table>
+</div>
+<h2 id="events-1"><a class="header" href="#events-1">Events</a></h2>
+<h3 id="vestingcreated"><a class="header" href="#vestingcreated">VestingCreated</a></h3>
+<p>Event emitted when a new vesting schedule is created</p>
+<pre><code class="language-solidity">event VestingCreated(address indexed beneficiary, uint256 amount, uint256 creationTime);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>beneficiary</code></td><td><code>address</code></td><td>Address of the token recipient</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>Total amount of tokens to be vested</td></tr>
+<tr><td><code>creationTime</code></td><td><code>uint256</code></td><td>Timestamp of vesting schedule creation</td></tr>
+</tbody></table>
+</div>
+<h3 id="tokenswithdrawn"><a class="header" href="#tokenswithdrawn">TokensWithdrawn</a></h3>
+<p>Event emitted when tokens are withdrawn</p>
+<pre><code class="language-solidity">event TokensWithdrawn(address indexed to, uint256 amount);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>to</code></td><td><code>address</code></td><td>Address receiving the withdrawn tokens</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>Amount of tokens withdrawn</td></tr>
+</tbody></table>
+</div>
+<h3 id="claim-1"><a class="header" href="#claim-1">Claim</a></h3>
+<p>Event emitted when tokens are claimed</p>
+<pre><code class="language-solidity">event Claim(address indexed beneficiary, uint256 amount, uint256 timestamp);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>beneficiary</code></td><td><code>address</code></td><td>Address claiming the tokens</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>Amount of tokens claimed</td></tr>
+<tr><td><code>timestamp</code></td><td><code>uint256</code></td><td>Timestamp of the claim</td></tr>
+</tbody></table>
+</div>
+<h2 id="errors-5"><a class="header" href="#errors-5">Errors</a></h2>
+<h3 id="vestingnotfound"><a class="header" href="#vestingnotfound">VestingNotFound</a></h3>
+<p><em>Error thrown when attempting to interact with a non-existent vesting schedule</em></p>
+<pre><code class="language-solidity">error VestingNotFound();
+</code></pre>
+<h3 id="claimnotavailable"><a class="header" href="#claimnotavailable">ClaimNotAvailable</a></h3>
+<p><em>Error thrown when trying to claim tokens before they are available</em></p>
+<pre><code class="language-solidity">error ClaimNotAvailable(uint256 blockTimestamp, uint256 availableFrom);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>blockTimestamp</code></td><td><code>uint256</code></td><td>Current block timestamp</td></tr>
+<tr><td><code>availableFrom</code></td><td><code>uint256</code></td><td>Timestamp when tokens become available</td></tr>
+</tbody></table>
+</div>
+<h3 id="nothingtoclaim"><a class="header" href="#nothingtoclaim">NothingToClaim</a></h3>
+<p><em>Error thrown when there are no tokens available to claim</em></p>
+<pre><code class="language-solidity">error NothingToClaim();
+</code></pre>
+<h3 id="infsufficientbalance"><a class="header" href="#infsufficientbalance">InfsufficientBalance</a></h3>
+<p><em>Error thrown when attempting to claim more tokens than available</em></p>
+<pre><code class="language-solidity">error InfsufficientBalance(uint256 availableBalance, uint256 totalAmount);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>availableBalance</code></td><td><code>uint256</code></td><td>Current available balance</td></tr>
+<tr><td><code>totalAmount</code></td><td><code>uint256</code></td><td>Total amount requested</td></tr>
+</tbody></table>
+</div>
+<h3 id="vestingalreadyexist"><a class="header" href="#vestingalreadyexist">VestingAlreadyExist</a></h3>
+<p><em>Error thrown when trying to create a vesting schedule that already exists</em></p>
+<pre><code class="language-solidity">error VestingAlreadyExist();
+</code></pre>
+<h3 id="amountcantbezero"><a class="header" href="#amountcantbezero">AmountCantBeZero</a></h3>
+<p><em>Error thrown when attempting to create a vesting schedule with zero amount</em></p>
+<pre><code class="language-solidity">error AmountCantBeZero();
+</code></pre>
+<h3 id="starttimeshouldbefuture"><a class="header" href="#starttimeshouldbefuture">StartTimeShouldBeFuture</a></h3>
+<p><em>Error thrown when vesting start time is not in the future</em></p>
+<pre><code class="language-solidity">error StartTimeShouldBeFuture(uint256 startTime, uint256 blockTimestamp);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>startTime</code></td><td><code>uint256</code></td><td>Proposed start time</td></tr>
+<tr><td><code>blockTimestamp</code></td><td><code>uint256</code></td><td>Current block timestamp</td></tr>
+</tbody></table>
+</div>
+<h3 id="durationcantbezero"><a class="header" href="#durationcantbezero">DurationCantBeZero</a></h3>
+<p><em>Error thrown when vesting duration is zero</em></p>
+<pre><code class="language-solidity">error DurationCantBeZero();
+</code></pre>
+<h3 id="cooldowncantbelongerthanduration"><a class="header" href="#cooldowncantbelongerthanduration">CooldownCantBeLongerThanDuration</a></h3>
+<p><em>Error thrown when claim cooldown is longer than vesting duration</em></p>
+<pre><code class="language-solidity">error CooldownCantBeLongerThanDuration();
+</code></pre>
+<h3 id="invalidbeneficiary"><a class="header" href="#invalidbeneficiary">InvalidBeneficiary</a></h3>
+<p><em>Error thrown when beneficiary address is invalid</em></p>
+<pre><code class="language-solidity">error InvalidBeneficiary();
+</code></pre>
+<h3 id="belowminimalclaimamount"><a class="header" href="#belowminimalclaimamount">BelowMinimalClaimAmount</a></h3>
+<p><em>Error thrown when claim amount is below the minimum claim amount</em></p>
+<pre><code class="language-solidity">error BelowMinimalClaimAmount(uint256 minClaimAmount, uint256 lastClaimTime);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>minClaimAmount</code></td><td><code>uint256</code></td><td>Minimum allowed claim amount</td></tr>
+<tr><td><code>lastClaimTime</code></td><td><code>uint256</code></td><td>Timestamp of last claim</td></tr>
+</tbody></table>
+</div>
+<h3 id="cooldownnotpassed"><a class="header" href="#cooldownnotpassed">CooldownNotPassed</a></h3>
+<p><em>Error thrown when claim cooldown period has not passed</em></p>
+<pre><code class="language-solidity">error CooldownNotPassed(uint256 blockTimestamp, uint256 lastClaimTime);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>blockTimestamp</code></td><td><code>uint256</code></td><td>Current block timestamp</td></tr>
+<tr><td><code>lastClaimTime</code></td><td><code>uint256</code></td><td>Timestamp of last claim</td></tr>
+</tbody></table>
+</div>
+<h3 id="nothingtowithdraw"><a class="header" href="#nothingtowithdraw">NothingToWithdraw</a></h3>
+<p><em>Error thrown when there are no tokens to withdraw</em></p>
+<pre><code class="language-solidity">error NothingToWithdraw();
+</code></pre>
+<h2 id="structs-1"><a class="header" href="#structs-1">Structs</a></h2>
+<h3 id="vestinginfo"><a class="header" href="#vestinginfo">VestingInfo</a></h3>
+<p>Information about a beneficiary's vesting schedule</p>
+<pre><code class="language-solidity">struct VestingInfo {
+    uint256 totalAmount;
+    uint256 startTime;
+    uint256 cliff;
+    uint256 duration;
+    uint256 claimed;
+    uint256 lastClaimTime;
+    uint256 claimCooldown;
+    uint256 minClaimAmount;
+    bool created;
+}
+</code></pre>
+<p><strong>Properties</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>totalAmount</code></td><td><code>uint256</code></td><td>Total number of tokens to be vested</td></tr>
+<tr><td><code>startTime</code></td><td><code>uint256</code></td><td>Timestamp when vesting begins</td></tr>
+<tr><td><code>cliff</code></td><td><code>uint256</code></td><td>Duration of the cliff period in seconds</td></tr>
+<tr><td><code>duration</code></td><td><code>uint256</code></td><td>Total duration of the vesting period in seconds</td></tr>
+<tr><td><code>claimed</code></td><td><code>uint256</code></td><td>Amount of tokens already claimed</td></tr>
+<tr><td><code>lastClaimTime</code></td><td><code>uint256</code></td><td>Timestamp of the last claim</td></tr>
+<tr><td><code>claimCooldown</code></td><td><code>uint256</code></td><td>Minimum time interval between claims in seconds</td></tr>
+<tr><td><code>minClaimAmount</code></td><td><code>uint256</code></td><td>Minimum amount that can be claimed in a single transaction</td></tr>
+<tr><td><code>created</code></td><td><code>bool</code></td><td>Indicates whether the vesting schedule has been created</td></tr>
+</tbody></table>
+</div>
+<h3 id="vestingparams"><a class="header" href="#vestingparams">VestingParams</a></h3>
+<p>Parameters for creating a new vesting schedule in startVesting function</p>
+<pre><code class="language-solidity">struct VestingParams {
+    address beneficiary;
+    uint256 totalAmount;
+    uint256 startTime;
+    uint256 cliff;
+    uint256 duration;
+    uint256 claimCooldown;
+    uint256 minClaimAmount;
+}
+</code></pre>
+<p><strong>Properties</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>beneficiary</code></td><td><code>address</code></td><td>Address that will receive vested tokens</td></tr>
+<tr><td><code>totalAmount</code></td><td><code>uint256</code></td><td>Total number of tokens to be vested</td></tr>
+<tr><td><code>startTime</code></td><td><code>uint256</code></td><td>Timestamp when vesting begins</td></tr>
+<tr><td><code>cliff</code></td><td><code>uint256</code></td><td>Duration of the cliff period in seconds</td></tr>
+<tr><td><code>duration</code></td><td><code>uint256</code></td><td>Total duration of the vesting period in seconds</td></tr>
+<tr><td><code>claimCooldown</code></td><td><code>uint256</code></td><td>Minimum time interval between claims in seconds</td></tr>
+<tr><td><code>minClaimAmount</code></td><td><code>uint256</code></td><td>Minimum amount that can be claimed in a single transaction</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="vesting"><a class="header" href="#vesting">Vesting</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CVesting%5CVesting.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+<a href="contracts%5CVesting%5CVesting.sol//contracts%5CVesting%5CIVesting.sol%5Cinterface.IVesting.html">IVesting</a>, <a href="contracts%5CVesting%5CVesting.sol//contracts%5CUtilityContract%5CAbstractUtilityContract.sol%5Cabstract.AbstractUtilityContract.html">AbstractUtilityContract</a>, Ownable</p>
+<p>Implements a token vesting mechanism with flexible scheduling</p>
+<p><em>Allows creating vesting schedules with cliff periods, custom durations, and claim restrictions</em></p>
+<h2 id="state-variables-5"><a class="header" href="#state-variables-5">State Variables</a></h2>
+<h3 id="token-3"><a class="header" href="#token-3">token</a></h3>
+<p>ERC20 token used for vesting</p>
+<pre><code class="language-solidity">IERC20 public token;
+</code></pre>
+<h3 id="allocatedtokens"><a class="header" href="#allocatedtokens">allocatedTokens</a></h3>
+<p>Total number of tokens currently allocated in vesting schedules</p>
+<pre><code class="language-solidity">uint256 public allocatedTokens;
+</code></pre>
+<h3 id="vestings"><a class="header" href="#vestings">vestings</a></h3>
+<p>Mapping of beneficiary addresses to their vesting schedules</p>
+<pre><code class="language-solidity">mapping(address =&gt; IVesting.VestingInfo) public vestings;
+</code></pre>
+<h2 id="functions-8"><a class="header" href="#functions-8">Functions</a></h2>
+<h3 id="constructor-4"><a class="header" href="#constructor-4">constructor</a></h3>
+<p>Use VestingLib for VestingInfo struct operations</p>
+<p>Initializes the contract with deploy manager, token, and owner</p>
+<pre><code class="language-solidity">constructor() payable Ownable(msg.sender);
+</code></pre>
+<h3 id="claim-2"><a class="header" href="#claim-2">claim</a></h3>
+<p>Allows beneficiary to claim vested tokens</p>
+<pre><code class="language-solidity">function claim() public;
+</code></pre>
+<h3 id="startvesting-1"><a class="header" href="#startvesting-1">startVesting</a></h3>
+<p>Starts a new vesting schedule</p>
+<pre><code class="language-solidity">function startVesting(IVesting.VestingParams calldata params) external onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>params</code></td><td><code>IVesting.VestingParams</code></td><td>Vesting parameters for the new schedule</td></tr>
+</tbody></table>
+</div>
+<h3 id="withdrawunallocated-1"><a class="header" href="#withdrawunallocated-1">withdrawUnallocated</a></h3>
+<p>Withdraws unallocated tokens</p>
+<pre><code class="language-solidity">function withdrawUnallocated(address _to) external onlyOwner;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_to</code></td><td><code>address</code></td><td>Address to receive unallocated tokens</td></tr>
+</tbody></table>
+</div>
+<h3 id="initialize-5"><a class="header" href="#initialize-5">initialize</a></h3>
+<pre><code class="language-solidity">function initialize(bytes memory _initData) external override notInitialized returns (bool);
+</code></pre>
+<h3 id="vestedamount-1"><a class="header" href="#vestedamount-1">vestedAmount</a></h3>
+<p>Calculates the total amount of tokens vested for a beneficiary</p>
+<pre><code class="language-solidity">function vestedAmount(address _claimer) public view returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_claimer</code></td><td><code>address</code></td><td>Address of the beneficiary</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Total vested amount</td></tr>
+</tbody></table>
+</div>
+<h3 id="claimableamount-1"><a class="header" href="#claimableamount-1">claimableAmount</a></h3>
+<p>Calculates the amount of tokens currently claimable</p>
+<pre><code class="language-solidity">function claimableAmount(address _claimer) public view returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_claimer</code></td><td><code>address</code></td><td>Address of the beneficiary</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Claimable amount of tokens</td></tr>
+</tbody></table>
+</div>
+<h3 id="getvestinginfo-1"><a class="header" href="#getvestinginfo-1">getVestingInfo</a></h3>
+<p>Returns the vesting info for a beneficiary</p>
+<pre><code class="language-solidity">function getVestingInfo(address _claimer) public view returns (IVesting.VestingInfo memory);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_claimer</code></td><td><code>address</code></td><td>Address of the beneficiary</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>IVesting.VestingInfo</code></td><td>Vesting info for the beneficiary</td></tr>
+</tbody></table>
+</div>
+<h3 id="getinitdata-4"><a class="header" href="#getinitdata-4">getInitData</a></h3>
+<p>Generates initialization data for the contract</p>
+<pre><code class="language-solidity">function getInitData(address _deployManager, address _token, address _owner) external pure returns (bytes memory);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>_deployManager</code></td><td><code>address</code></td><td>Address of the deploy manager</td></tr>
+<tr><td><code>_token</code></td><td><code>address</code></td><td>Address of the token contract</td></tr>
+<tr><td><code>_owner</code></td><td><code>address</code></td><td>Address of the contract owner</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bytes</code></td><td>Encoded initialization data</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="vestinglib"><a class="header" href="#vestinglib">VestingLib</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CVesting%5CVestingLib.sol">Git Source</a></p>
+<p>Library for calculating vested and claimable token amounts</p>
+<p><em>Provides utility functions for vesting schedule calculations</em></p>
+<h2 id="functions-9"><a class="header" href="#functions-9">Functions</a></h2>
+<h3 id="vestedamount-2"><a class="header" href="#vestedamount-2">vestedAmount</a></h3>
+<p>Calculates the total amount of tokens vested at the current time</p>
+<p><em>Computes vested tokens based on the vesting schedule, considering cliff period</em></p>
+<pre><code class="language-solidity">function vestedAmount(IVesting.VestingInfo storage v) internal view returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>v</code></td><td><code>IVesting.VestingInfo</code></td><td>Storage reference to the VestingInfo struct</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Amount of tokens vested</td></tr>
+</tbody></table>
+</div>
+<h3 id="claimableamount-2"><a class="header" href="#claimableamount-2">claimableAmount</a></h3>
+<p>Calculates the amount of tokens currently available to claim</p>
+<p><em>Computes claimable tokens by subtracting already claimed tokens from vested amount</em></p>
+<pre><code class="language-solidity">function claimableAmount(IVesting.VestingInfo storage v) internal view returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>v</code></td><td><code>IVesting.VestingInfo</code></td><td>Storage reference to the VestingInfo struct</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Amount of tokens that can be claimed</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="erc20mock"><a class="header" href="#erc20mock">ERC20Mock</a></h1>
+<p><a href="https://github.com-personal/danseren/smart-deployer/blob/5e1d785c7889313bede419942a1bc275bae6bb22/contracts%5CERC20Mock.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+ERC20</p>
+<p>A simple mock ERC20 token for testing and development purposes</p>
+<p><em>Mints a fixed amount of tokens to a specified recipient during deployment</em></p>
+<h2 id="functions-10"><a class="header" href="#functions-10">Functions</a></h2>
+<h3 id="constructor-5"><a class="header" href="#constructor-5">constructor</a></h3>
+<p>Initializes the mock token with a fixed supply</p>
+<p><em>Mints 10,000 tokens multiplied by the token's decimal precision</em></p>
+<pre><code class="language-solidity">constructor(address recipient) payable ERC20("MyToken", "MTK");
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>recipient</code></td><td><code>address</code></td><td>Address that will receive the initial token supply</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="solidity.min.js"></script>
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
